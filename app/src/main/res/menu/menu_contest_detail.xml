@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.kayulab.android.coderadar.view.ContestDetailActivity">
+    <item android:id="@+id/action_calendar"
+          android:title="@string/action_calendar"
+          android:icon="@drawable/ic_action_new_event"
+          android:showAsAction="always"
+          app:showAsAction="always"/>
+
+    <item android:id="@+id/action_browse"
+          android:title="@string/action_browse"
+          android:icon="@drawable/ic_action_web_site"
+          android:showAsAction="always"
+          app:showAsAction="always"/>
+</menu>

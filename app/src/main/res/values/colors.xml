@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#343838</color>
+    <color name="primary_dark">#263238</color>
+    <color name="accent">#EF9A9A</color>
+    <color name="tab_scroll_color">@android:color/white</color>
+
+    <color name="codeforces">#00C7EF</color>
+    <color name="topcoder">#E52746</color>
+    <color name="hackerrank">#8BA62C</color>
+    <color name="urioj">#F2A328</color>
+    <color name="hackerearth">#1D3853</color>
+    <color name="codechef">#CAC749</color>
+</resources>

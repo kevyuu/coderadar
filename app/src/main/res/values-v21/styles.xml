@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="AppTheme" parent="android:Theme.Material">
+        <!-- Customize your theme here. -->
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:windowContentTransitions">true</item>
+
+    </style>
+
+    <style name="DetailTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/DetailActionBar</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="DetailActionBar" parent="android:Widget.Material.Light.ActionBar">
+        <item name="android:displayOptions">homeAsUp</item>
+    </style>
+
+</resources>
