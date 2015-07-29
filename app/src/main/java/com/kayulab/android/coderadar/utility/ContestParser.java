@@ -1,5 +1,7 @@
 package com.kayulab.android.coderadar.utility;
 
+import android.util.Log;
+
 import com.kayulab.android.coderadar.model.Contest;
 import com.kayulab.android.coderadar.model.OnlineJudge;
 
@@ -23,16 +25,33 @@ public class ContestParser {
 
         Document doc = Jsoup.parseBodyFragment(rssString);
 
+        if (doc.getElementsByTag("channel").size() == 0) {
+            return contests;
+        }
+        Log.d("DEBUG","passed");
         Element channel = doc.getElementsByTag("channel").get(0);
 
         Elements contestsRSS = channel.getElementsByTag("item");
 
         for (Element contestRSS : contestsRSS) {
-            String title = contestRSS.getElementsByTag("title").get(0).text();
-            String description = contestRSS.getElementsByTag("description").get(0).text();
-            String url = contestRSS.getElementsByTag("url").get(0).text();
-            String startDate = contestRSS.getElementsByTag("startTime").get(0).text();
-            String endDate = contestRSS.getElementsByTag("endTime").get(0).text();
+
+            Elements titleElements = contestRSS.getElementsByTag("title");
+            Elements descriptionElements = contestRSS.getElementsByTag("description");
+            Elements urlElements = contestRSS.getElementsByTag("url");
+            Elements startDateElements = contestRSS.getElementsByTag("startTime");
+            Elements endDateElements = contestRSS.getElementsByTag("endTime");
+
+            String title ="",description = "",url = "",startDate = "" ,endDate = "";
+            if (titleElements.size() != 0)
+                title = titleElements.get(0).text();
+            if (descriptionElements.size() != 0)
+                description = descriptionElements.get(0).text();
+            if (urlElements.size() != 0)
+                url = urlElements.get(0).text();
+            if (startDateElements.size() != 0)
+                startDate = startDateElements.get(0).text();
+            if (endDateElements.size() != 0)
+                endDate = endDateElements.get(0).text();
 
             String source = getSourceFromTitleOrURL(title,url);
 

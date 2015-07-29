@@ -5,13 +5,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <array name="drawer_descriptions">
-        <item>Contest</item>
-        <item>Online Judge</item>
-        <item>About Us</item>
-        <item>Settings</item>
-    </array>
-
     <string name="codeforces">Codeforces</string>
     <string name="hackerrank">Hackerrank</string>
     <string name="topcoder">TopCoder</string>

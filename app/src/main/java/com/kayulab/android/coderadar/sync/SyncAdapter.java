@@ -11,6 +11,7 @@ import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.kayulab.android.coderadar.R;
 import com.kayulab.android.coderadar.data.ContestContract;
@@ -34,6 +35,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter{
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
+        Log.d("DEBUG","onPerformSync");
         StringDownloader downloader = new StringDownloader();
         try {
             downloader.download("https://www.hackerrank.com/calendar/feed.rss");
@@ -43,6 +45,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter{
         String rssString = downloader.getString();
 
         ContestParser parser = new ContestParser();
+        Log.d("DEBUG",rssString);
         ArrayList<Contest> contests = parser.parse(rssString);
 
         ContentValues[] cvArray = new ContentValues[contests.size()];
@@ -113,6 +116,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter{
     }
 
     public static void initializeSyncAdapter(Context context) {
+
         getSyncAccount(context);
     }
 }

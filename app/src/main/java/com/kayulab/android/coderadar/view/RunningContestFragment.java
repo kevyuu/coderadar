@@ -33,16 +33,15 @@ public class RunningContestFragment extends ContestListFragment {
 
         String whereClause = ContestContract.ContestEntry.COLUMN_START_TIME+" < ? AND " +
                 ContestContract.ContestEntry.COLUMN_END_TIME+" > ?";
-        whereClause += (" AND " + ContestContract.ContestEntry.COLUMN_SOURCE+" IN (");
 
-        for (int i=0;i< OnlineJudge.OJ_NUMBER;i++) {
-            boolean isShown = sharedPref.getBoolean(OnlineJudge.OJ_NAME[i],true);
-            if (isShown) {
-                whereClause += ("'"+OnlineJudge.OJ_NAME[i] + "', ");
+        whereClause += (" AND " + ContestContract.ContestEntry.COLUMN_SOURCE+" NOT IN (");
+        for (int i = 0; i < OnlineJudge.OJ_NUMBER; i++) {
+            boolean isShown = sharedPref.getBoolean(OnlineJudge.OJ_NAME[i], true);
+            if (!isShown) {
+                whereClause += ("'" + OnlineJudge.OJ_NAME[i] + "', ");
             }
         }
-        whereClause = whereClause.substring(0,whereClause.length()-2);
-        whereClause += ")";
+        whereClause += "'DUMMY')";
 
         String[] whereArgs = {
                 Long.toString(System.currentTimeMillis()),

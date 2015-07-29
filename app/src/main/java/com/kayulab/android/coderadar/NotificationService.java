@@ -62,7 +62,7 @@ public class NotificationService extends IntentService {
 
         long earliestTime = -1;
 
-        while(cursor.moveToNext()) {
+        while(cursor!= null && cursor.moveToNext()) {
             long contestStartTime = cursor.getLong(COL_CONTEST_START_TIME);
             long currentTime = System.currentTimeMillis();
             if (contestStartTime - notificationMillis > currentTime) {
