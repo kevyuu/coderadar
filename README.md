@@ -27,5 +27,13 @@ Upcoming Feature :
 - Hide/Unhide contest
 - Add more online judges like SPOJ
 
+## Credits
+- Hackerrank for providing hackerank calendar
+- Topcoder
+- Codeforces
+- Hackerearth
+- Codechef
+- URIOJ
+
 ## How to contribute
 If you want to help me to develop this app, you can become contributor by dropping an email to kayutamalab@gmail.com. I will really appreciate your help.
