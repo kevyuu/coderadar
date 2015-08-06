@@ -166,22 +166,6 @@ ADDED from AndroidManifest.xml:81:9
 		ADDED from AndroidManifest.xml:85:13
 	android:name
 		ADDED from AndroidManifest.xml:82:13
-receiver#com.kayulab.android.coderadar.CoderadarAppWidgetProvider
-ADDED from AndroidManifest.xml:91:9
-	android:name
-		ADDED from AndroidManifest.xml:91:19
-intent-filter#android.appwidget.action.APPWIDGET_UPDATE
-ADDED from AndroidManifest.xml:92:13
-action#android.appwidget.action.APPWIDGET_UPDATE
-ADDED from AndroidManifest.xml:93:17
-	android:name
-		ADDED from AndroidManifest.xml:93:25
-meta-data#android.appwidget.provider
-ADDED from AndroidManifest.xml:95:13
-	android:resource
-		ADDED from AndroidManifest.xml:96:24
-	android:name
-		ADDED from AndroidManifest.xml:95:24
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:22.1.1:20:5

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:minWidth="250dp"
+                    android:minHeight="250dp"
+                    android:minResizeWidth="50dp"
+                    android:minResizeHeight="150dp"
+                    android:updatePeriodMillis="86400000"
+                    android:previewImage="@drawable/example_appwidget_preview"
+                    android:initialLayout="@layout/contest_list_widget"
+                    android:resizeMode="horizontal|vertical"
+                    android:autoAdvanceViewId="@id/contest_listView_widget"
+                    android:widgetCategory="home_screen"
+                    android:initialKeyguardLayout="@layout/contest_list_widget">
+
+</appwidget-provider>

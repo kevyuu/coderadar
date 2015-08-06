@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:text="@string/appwidget_contest_list"
+        android:textSize="@dimen/abc_text_size_subhead_material"
+        android:textColor="@android:color/white"
+        android:background="@color/primary"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ListView
+        android:id="@+id/contest_listView_widget"
+        android:scrollbars="none"
+        android:background="#43FFFFFF"
+        android:dividerHeight="4dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingRight="@dimen/list_padding_right"
+        android:paddingLeft="@dimen/list_padding_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
