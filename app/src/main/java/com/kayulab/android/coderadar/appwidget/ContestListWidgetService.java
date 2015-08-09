@@ -11,6 +11,7 @@ import android.widget.RemoteViewsService;
 import com.kayulab.android.coderadar.R;
 import com.kayulab.android.coderadar.data.ContestContract;
 import com.kayulab.android.coderadar.model.Contest;
+import com.kayulab.android.coderadar.model.ContestListOption;
 import com.kayulab.android.coderadar.model.OnlineJudge;
 import com.kayulab.android.coderadar.utility.TimeUtil;
 
@@ -31,7 +32,9 @@ public class ContestListWidgetService extends RemoteViewsService {
 
         private Context mContext;
         private int mAppWidgetId;
+        private ContestListOption mContestListOption;
         private ArrayList<Contest> mContests = new ArrayList<>();
+        private ArrayList<Long> mContestId = new ArrayList<>();
         private int mCount;
 
         protected final String[] CONTEST_SUMMARY_COLUMNS = {
@@ -54,23 +57,20 @@ public class ContestListWidgetService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
-            String whereClause = ContestContract.ContestEntry.COLUMN_START_TIME+" < ? AND " +
-                    ContestContract.ContestEntry.COLUMN_END_TIME+" > ?";
 
-            String[] whereArgs = {
-                    Long.toString(System.currentTimeMillis()),
-                    Long.toString(System.currentTimeMillis())
-            };
+            mContestListOption = WidgetPreferenceUtil.getContestListWidgetOption(mContext, mAppWidgetId);
+            String whereClause = ContestContract.ContestEntry.buildWhereClause(
+                    mContestListOption.getStatus(),mContestListOption.getContestSource());
+
+            Log.d("DEBUG",whereClause);
 
             Cursor cursor = mContext.getContentResolver().query(ContestContract.ContestEntry.CONTENT_URI,
                     CONTEST_SUMMARY_COLUMNS,
                     whereClause,
-                    whereArgs,
+                    null,
                     ContestContract.ContestEntry.COLUMN_START_TIME+" ASC");
 
             mCount = 0;
-
-            Log.d("DEBUG", "ContestListWidgetService.onCreate()");
 
             for (int i=0;i < cursor.getCount(); i++) {
                 cursor.moveToNext();
@@ -80,13 +80,16 @@ public class ContestListWidgetService extends RemoteViewsService {
 
                 Long startTime = cursor.getLong(COL_CONTEST_START_TIME);
 
+                Long id = cursor.getLong(COL_CONTEST_ID);
+
                 Contest contest = new Contest();
                 contest.source(source).title(title).startDate(startTime);
 
                 mContests.add(contest);
+                mContestId.add(id);
+
                 mCount += 1;
             }
-            Log.d("DEBUG",Integer.toString(mCount));
 
             cursor.close();
         }
@@ -119,13 +122,17 @@ public class ContestListWidgetService extends RemoteViewsService {
             rv.setTextViewText(R.id.timeBeforeContest_textView, TimeUtil.getShortReadableDurationFromMillis(timeLeft));
             rv.setImageViewResource(R.id.onlineJudge_image,OnlineJudge.getIcon(contest.getSource()));
 
-            return rv;
+            Intent fillInIntent = new Intent();
+            fillInIntent.setData(ContestContract.ContestEntry.buildContestUriWithId(mContestId.get(position)));
+            rv.setOnClickFillInIntent(R.id.contest_item_container,fillInIntent);
 
+            return rv;
         }
 
         @Override
         public RemoteViews getLoadingView() {
-            return null;
+            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.loading_contest_list);
+            return rv;
         }
 
         @Override

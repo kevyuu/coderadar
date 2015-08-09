@@ -65,7 +65,20 @@
 
     <string name="appwidget_text">EXAMPLE</string>
     <string name="appwidget_contest_list">Contest List</string>
+    <string name="appwidget_contest_list_empty">No contest available</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
+    <string name="title_activity_contest_list_widget_configure">Widget Options</string>
+
+    <!-- Widget Configure Activity -->
+    <string name="configure_status_title">Status</string>
+    <string name="configure_activity_today">Today</string>
+    <string name="configure_activity_running">Running</string>
+    <string name="configure_activity_upcoming">Upcoming</string>
+
+    <string name="configure_contest_source">Contest Source</string>
+
+    <string name="configure_ok_button">Ok</string>
+    <string name="configure_cancel_button">Cancel</string>
 
 </resources>

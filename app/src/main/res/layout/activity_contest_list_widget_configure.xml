@@ -1,0 +1,117 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context="com.kayulab.android.coderadar.appwidget.ContestListWidgetConfigureActivity">
+
+    <TextView
+        android:text="@string/configure_status_title"
+        android:textColor="@color/accent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:listSeparatorTextViewStyle"/>
+    <RadioGroup
+                android:id="@+id/configure_radio_group"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:checkedButton="@+id/configure_radio_running">
+
+        <RadioButton android:id="@id/configure_radio_running"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="@string/configure_activity_running"/>
+        <RadioButton android:id="@+id/configure_radio_today"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="@string/configure_activity_today"/>
+        <RadioButton android:id="@+id/configure_radio_upcoming"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="@string/configure_activity_upcoming"/>
+    </RadioGroup>
+
+    <TextView
+        android:text="@string/configure_contest_source"
+        android:textColor="@color/accent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <CheckBox
+        android:id="@+id/configure_codeforces_checkbox"
+        android:text="@string/codeforces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onContestSourceCheckboxClicked"/>
+
+    <CheckBox
+        android:id="@+id/configure_codechef_checkbox"
+        android:text="@string/codechef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onContestSourceCheckboxClicked"/>
+
+
+    <CheckBox
+        android:id="@+id/configure_topcoder_checkbox"
+        android:text="@string/topcoder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onContestSourceCheckboxClicked"/>
+
+    <CheckBox
+        android:id="@+id/configure_hackerrank_checkbox"
+        android:text="@string/hackerrank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onContestSourceCheckboxClicked"/>
+
+    <CheckBox
+        android:id="@+id/configure_hackerearth_checkbox"
+        android:text="@string/hackerearth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onContestSourceCheckboxClicked"/>
+
+    <CheckBox
+        android:id="@+id/configure_urioj_checkbox"
+        android:text="@string/urioj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onContestSourceCheckboxClicked"/>
+
+    <CheckBox
+        android:id="@+id/configure_unknown_checkbox"
+        android:text="@string/unknown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onContestSourceCheckboxClicked"/>
+
+    <Button
+        android:id="@+id/configure_ok_button"
+        android:text="@string/configure_ok_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onOkButtonClicked"/>
+
+    <Button
+        android:id="@+id/configure_cancel_button"
+        android:text="@string/configure_cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onCancelButtonClicked"/>
+
+</LinearLayout>

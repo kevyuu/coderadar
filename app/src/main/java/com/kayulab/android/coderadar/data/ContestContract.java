@@ -4,6 +4,13 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
+
+import com.kayulab.android.coderadar.model.ContestSource;
+import com.kayulab.android.coderadar.model.ContestStatus;
+
+import java.util.Calendar;
+import java.util.EnumSet;
 
 /**
  * Created by kevinyu on 5/19/15.
@@ -50,6 +57,47 @@ public class ContestContract {
         public static int getIDFromUri(Uri uri) {
             String id = uri.getLastPathSegment();
             return Integer.parseInt(id);
+        }
+
+        public static String buildWhereClause(
+                ContestStatus contestStatus,
+                EnumSet<ContestSource> contestSources) {
+            String whereClause = "";
+            if (contestStatus == ContestStatus.RUNNING) {
+                whereClause = ContestContract.ContestEntry.COLUMN_START_TIME+" < "+
+                        System.currentTimeMillis()+" AND " +
+                        ContestContract.ContestEntry.COLUMN_END_TIME+" > "+System.currentTimeMillis();
+            } else if (contestStatus == ContestStatus.UPCOMING) {
+                whereClause = ContestContract.ContestEntry.COLUMN_START_TIME + " > "
+                        + Long.toString(System.currentTimeMillis());
+            } else if (contestStatus == ContestStatus.TODAY) {
+                Log.d("DEBUG",Long.toString(System.currentTimeMillis()));
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                long startOfTodayMillis = calendar.getTimeInMillis();
+
+                calendar.add(Calendar.DATE, 1);
+                long endOfTodayMillis = calendar.getTimeInMillis();
+
+                Log.d("DEBUG",Long.toString(endOfTodayMillis));
+
+                whereClause = ContestContract.ContestEntry.COLUMN_START_TIME+" > "+ startOfTodayMillis
+                        +" AND " +
+                        ContestContract.ContestEntry.COLUMN_START_TIME+" < "+endOfTodayMillis;
+            }
+
+
+            whereClause += (" AND " + ContestContract.ContestEntry.COLUMN_SOURCE+" IN (");
+            for (ContestSource contestSource : contestSources) {
+                whereClause += ("'" + contestSource.getName() + "', ");
+            }
+            whereClause += "'DUMMY')"; //This esure that the IN argument did not empty
+                                        // ohterwise the query will be invalid when ContestSource empty
+
+            return whereClause;
         }
 
     }
