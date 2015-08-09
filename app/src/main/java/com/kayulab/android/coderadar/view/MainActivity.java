@@ -28,6 +28,7 @@ public class MainActivity extends FragmentActivity implements ContestListFragmen
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // inside your activity (if you did not enable transitions in your theme)
             getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
@@ -55,13 +56,14 @@ public class MainActivity extends FragmentActivity implements ContestListFragmen
             getActionBar().setElevation(0);
         }
 
-        SyncAdapter.initializeSyncAdapter(this);
 
         boolean isReminderOn = PreferenceUtil.isReminderOn(this);
 
         if (!NotificationService.isAlarmOn(this) && isReminderOn) {
             NotificationService.startAlarm(this);
         }
+
+        SyncAdapter.initializeSyncAdapter(this);
 
     }
 

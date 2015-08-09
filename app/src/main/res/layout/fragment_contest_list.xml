@@ -16,5 +16,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <LinearLayout
+        android:layout_gravity="top|center_horizontal"
+        android:background="#AA000000"
+        android:id="@+id/sync_progress_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:layout_margin="16dp"
+        android:layout_height="48dp">
+
+        <ProgressBar
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"/>
+
+        <TextView
+            android:text="@string/fetching_data"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 </FrameLayout>

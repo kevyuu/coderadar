@@ -7,21 +7,27 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.kayulab.android.coderadar.R;
 import com.kayulab.android.coderadar.data.ContestContract;
+import com.kayulab.android.coderadar.sync.SyncAdapter;
+import com.kayulab.android.coderadar.sync.SyncStatusReceiver;
 
 public abstract class ContestListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     //private OnFragmentInteractionListener mListener;
     private ListView mContestListView;
     private ContestAdapter mContestAdapter;
+    private SyncStatusReceiver mSyncStatusReceiver;
+    private ViewGroup mSyncProgressContainer;
 
     private static final int CONTEST_LOADER_ID = 0;
 
@@ -50,6 +56,7 @@ public abstract class ContestListFragment extends Fragment implements LoaderMana
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -62,6 +69,12 @@ public abstract class ContestListFragment extends Fragment implements LoaderMana
 
         mContestListView = (ListView) view.findViewById(R.id.contest_listView);
         mContestListView.setAdapter(mContestAdapter);
+
+        mSyncProgressContainer = (ViewGroup) view.findViewById(R.id.sync_progress_container);
+
+        if (SyncAdapter.isSyncing) {
+            mSyncProgressContainer.setVisibility(View.VISIBLE);
+        }
 
         mContestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -80,20 +93,47 @@ public abstract class ContestListFragment extends Fragment implements LoaderMana
             }
         });
 
-        updateContest();
+        mSyncStatusReceiver = new SyncStatusReceiver() {
+
+            @Override
+            public void onSyncStart() {
+                Log.d("DEBUG","onSyncStart()");
+                mSyncProgressContainer.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onSyncFinish() {
+                Log.d("DEBUG","onSyncFinish()");
+                mSyncProgressContainer.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onSyncError() {
+                Log.d("DEBUG","onSyncError()");
+                Toast.makeText(getActivity(),"Error. Check your network connection",Toast.LENGTH_SHORT).show();
+            }
+
+        };
 
         return view;
     }
 
     private void updateContest() {
 
-        //SyncAdapter.syncImmediately(getActivity());
+        SyncAdapter.syncImmediately(getActivity());
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getLoaderManager().restartLoader(CONTEST_LOADER_ID,null,this);
+        getActivity().registerReceiver(mSyncStatusReceiver,SyncStatusReceiver.getIntentFilter());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(mSyncStatusReceiver);
     }
 
     public void onFilterChanged() {

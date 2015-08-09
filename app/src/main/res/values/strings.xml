@@ -81,4 +81,6 @@
     <string name="configure_ok_button">Ok</string>
     <string name="configure_cancel_button">Cancel</string>
 
+    <string name="fetching_data">Fetching data from internet</string>
+
 </resources>

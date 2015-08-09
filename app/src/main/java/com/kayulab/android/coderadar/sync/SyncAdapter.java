@@ -7,6 +7,8 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SyncInfo;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
@@ -33,34 +35,65 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter{
         super(context, autoInitialize);
     }
 
+    public static volatile boolean isSyncing = false;
+
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        Log.d("DEBUG","onPerformSync");
+
+        sendStartIntent();
+
+        isSyncing = true;
+
+        if (isSyncing) {
+            Log.d("DEBUG","onPerformSync.isSyncing");
+        }
+
         StringDownloader downloader = new StringDownloader();
         try {
             downloader.download("https://www.hackerrank.com/calendar/feed.rss");
+            String rssString = downloader.getString();
+            if (rssString!=null) {
+                ContestParser parser = new ContestParser();
+                ArrayList<Contest> contests = parser.parse(rssString);
+
+                ContentValues[] cvArray = new ContentValues[contests.size()];
+                for (int i = 0; i < contests.size(); i++) {
+                    cvArray[i] = contests.get(i).toContentValues();
+                }
+
+                String[] deleteSelectionArgs = new String[1];
+                deleteSelectionArgs[0] = "0";
+                getContext().getContentResolver().delete(ContestContract.ContestEntry.CONTENT_URI,
+                        ContestContract.ContestEntry.COLUMN_START_TIME + " >= ?", deleteSelectionArgs);
+                getContext().getContentResolver().bulkInsert(ContestContract.ContestEntry.CONTENT_URI,
+                        cvArray);
+            }
         } catch (IOException e) {
+            sendErrorIntent();
             e.printStackTrace();
         }
-        String rssString = downloader.getString();
 
-        ContestParser parser = new ContestParser();
-        Log.d("DEBUG",rssString);
-        ArrayList<Contest> contests = parser.parse(rssString);
 
-        ContentValues[] cvArray = new ContentValues[contests.size()];
-        for (int i=0;i<contests.size();i++) {
-            cvArray[i] = contests.get(i).toContentValues();
-        }
+        isSyncing = false;
 
-        String[] deleteSelectionArgs = new String[1];
-        deleteSelectionArgs[0] = "0";
-        getContext().getContentResolver().delete(ContestContract.ContestEntry.CONTENT_URI,
-                ContestContract.ContestEntry.COLUMN_START_TIME + " >= ?",deleteSelectionArgs);
-        getContext().getContentResolver().bulkInsert(ContestContract.ContestEntry.CONTENT_URI,
-                cvArray);
+        sendStopIntent();
 
         return;
+    }
+
+    private void sendStartIntent() {
+        Intent startIntent = new Intent(SyncStatusReceiver.ACTION_SYNC_START);
+        getContext().sendBroadcast(startIntent);
+    }
+
+    private void sendStopIntent() {
+        Intent stopIntent = new Intent(SyncStatusReceiver.ACTION_SYNC_STOP);
+        getContext().sendBroadcast(stopIntent);
+    }
+
+    private void sendErrorIntent() {
+        Intent errorIntent = new Intent(SyncStatusReceiver.ACTION_SYNC_ERROR);
+        getContext().sendBroadcast(errorIntent);
     }
 
     public static Account getSyncAccount(Context context) {
@@ -118,5 +151,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter{
     public static void initializeSyncAdapter(Context context) {
 
         getSyncAccount(context);
+    }
+
+    public static boolean isSyncActive(Context context)
+    {
+        Account account = getSyncAccount(context);
+        String authority = context.getString(R.string.content_authority);
+        for(SyncInfo syncInfo : ContentResolver.getCurrentSyncs())
+        {
+            if(syncInfo.account.equals(account) &&
+                    syncInfo.authority.equals(authority))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
