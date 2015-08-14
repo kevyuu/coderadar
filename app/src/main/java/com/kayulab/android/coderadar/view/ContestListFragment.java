@@ -1,5 +1,9 @@
 package com.kayulab.android.coderadar.view;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
+import android.content.SyncStatusObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,27 +11,30 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kayulab.android.coderadar.R;
 import com.kayulab.android.coderadar.data.ContestContract;
-import com.kayulab.android.coderadar.sync.SyncAdapter;
-import com.kayulab.android.coderadar.sync.SyncStatusReceiver;
+import com.kayulab.android.coderadar.sync.SyncErrorStatusReceiver;
 
-public abstract class ContestListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class ContestListFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<Cursor>, SyncStatusObserver {
 
     //private OnFragmentInteractionListener mListener;
     private ListView mContestListView;
     private ContestAdapter mContestAdapter;
-    private SyncStatusReceiver mSyncStatusReceiver;
+    private SyncErrorStatusReceiver mSyncErrorStatusReceiver;
     private ViewGroup mSyncProgressContainer;
+    private TextView mNoContestTextView;
+
+    private Object mContentProviderHandle;
 
     private static final int CONTEST_LOADER_ID = 0;
 
@@ -63,6 +70,7 @@ public abstract class ContestListFragment extends Fragment implements LoaderMana
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_contest_list, container, false);
 
         mContestAdapter = new ContestAdapter(getActivity(),null,0);
@@ -71,10 +79,7 @@ public abstract class ContestListFragment extends Fragment implements LoaderMana
         mContestListView.setAdapter(mContestAdapter);
 
         mSyncProgressContainer = (ViewGroup) view.findViewById(R.id.sync_progress_container);
-
-        if (SyncAdapter.isSyncing) {
-            mSyncProgressContainer.setVisibility(View.VISIBLE);
-        }
+        mNoContestTextView = (TextView) view.findViewById(R.id.no_contest_textView);
 
         mContestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -93,47 +98,31 @@ public abstract class ContestListFragment extends Fragment implements LoaderMana
             }
         });
 
-        mSyncStatusReceiver = new SyncStatusReceiver() {
-
-            @Override
-            public void onSyncStart() {
-                Log.d("DEBUG","onSyncStart()");
-                mSyncProgressContainer.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onSyncFinish() {
-                Log.d("DEBUG","onSyncFinish()");
-                mSyncProgressContainer.setVisibility(View.GONE);
-            }
+        mSyncErrorStatusReceiver = new SyncErrorStatusReceiver() {
 
             @Override
             public void onSyncError() {
-                Log.d("DEBUG","onSyncError()");
-                Toast.makeText(getActivity(),"Error. Check your network connection",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),getActivity().getString(R.string.sync_error),Toast.LENGTH_SHORT).show();
             }
-
         };
-
         return view;
-    }
-
-    private void updateContest() {
-
-        SyncAdapter.syncImmediately(getActivity());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getLoaderManager().restartLoader(CONTEST_LOADER_ID,null,this);
-        getActivity().registerReceiver(mSyncStatusReceiver,SyncStatusReceiver.getIntentFilter());
+        getLoaderManager().restartLoader(CONTEST_LOADER_ID, null, this);
+        getActivity().registerReceiver(mSyncErrorStatusReceiver, SyncErrorStatusReceiver.getIntentFilter());
+        mContentProviderHandle = ContentResolver.addStatusChangeListener(
+                ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE,this);
+        refreshSyncProgressView();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(mSyncStatusReceiver);
+        ContentResolver.removeStatusChangeListener(mContentProviderHandle);
+        getActivity().unregisterReceiver(mSyncErrorStatusReceiver);
     }
 
     public void onFilterChanged() {
@@ -153,11 +142,60 @@ public abstract class ContestListFragment extends Fragment implements LoaderMana
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mContestAdapter.swapCursor(data);
+        if (data.getCount()==0) {
+            mNoContestTextView.setVisibility(View.VISIBLE);
+        } else {
+            mNoContestTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mContestAdapter.swapCursor(null);
+    }
+
+
+    @Override
+    public void onStatusChanged(int which) {
+
+        updateRefresh(isSyncing());
+    }
+
+    private boolean isSyncing() {
+        String accountType = getActivity().getString(R.string.sync_account_type);
+
+        AccountManager accountManager = AccountManager.get(getActivity());
+        Account[] accounts = accountManager
+                .getAccountsByType(accountType);
+
+        if (accounts.length <= 0) {
+            return false;
+        }
+
+        return ContentResolver.isSyncActive(accounts[0],
+                getActivity().getString(R.string.content_authority));
+    }
+
+    public void updateRefresh(final boolean isSyncing) {
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (isSyncing) {
+                    mSyncProgressContainer.setVisibility(View.VISIBLE);
+                } else {
+                    mSyncProgressContainer.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    private void refreshSyncProgressView() {
+        if (isSyncing()) {
+            mSyncProgressContainer.setVisibility(View.VISIBLE);
+        } else {
+            mSyncProgressContainer.setVisibility(View.INVISIBLE);
+        }
     }
 
 }

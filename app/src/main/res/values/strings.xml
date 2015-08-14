@@ -30,6 +30,7 @@
     <string name="action_calendar">Add to Calendar</string>
     <string name="action_browse">Go to website</string>
     <string name="action_filter">Filter</string>
+    <string name="action_refresh">Refresh</string>
 
     <!-- Contest Filter Dialog related -->
     <string name="filter_dialog_title">Filter</string>
@@ -82,5 +83,7 @@
     <string name="configure_cancel_button">Cancel</string>
 
     <string name="fetching_data">Fetching data from internet</string>
+    <string name="sync_error">Error when fetching data. Check your network connection</string>
+    <string name="no_contest">No Contest Available</string>
 
 </resources>

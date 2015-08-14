@@ -39,9 +39,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter{
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-
-        sendStartIntent();
-
         isSyncing = true;
 
         if (isSyncing) {
@@ -76,23 +73,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter{
 
         isSyncing = false;
 
-        sendStopIntent();
-
         return;
     }
 
-    private void sendStartIntent() {
-        Intent startIntent = new Intent(SyncStatusReceiver.ACTION_SYNC_START);
-        getContext().sendBroadcast(startIntent);
-    }
-
-    private void sendStopIntent() {
-        Intent stopIntent = new Intent(SyncStatusReceiver.ACTION_SYNC_STOP);
-        getContext().sendBroadcast(stopIntent);
-    }
-
     private void sendErrorIntent() {
-        Intent errorIntent = new Intent(SyncStatusReceiver.ACTION_SYNC_ERROR);
+        Intent errorIntent = new Intent(SyncErrorStatusReceiver.ACTION_SYNC_ERROR);
         getContext().sendBroadcast(errorIntent);
     }
 

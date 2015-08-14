@@ -43,4 +43,13 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/no_contest_textView"
+        android:layout_gravity="center"
+        android:text="@string/no_contest"
+        android:textColor="@android:color/white"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </FrameLayout>

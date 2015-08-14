@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 
 import com.kayulab.android.coderadar.R;
 import com.kayulab.android.coderadar.model.OnlineJudge;
+import com.kayulab.android.coderadar.sync.SyncAdapter;
 import com.kayulab.android.coderadar.view.widget.SlidingTabLayout;
 
 import java.util.Locale;
@@ -127,6 +128,9 @@ public class ContestFragment extends Fragment {
         switch(id) {
             case R.id.action_fitler :
                 showFilterDialog();
+                return true;
+            case R.id.action_refresh :
+                SyncAdapter.syncImmediately(getActivity());
                 return true;
             default :
                 return false;

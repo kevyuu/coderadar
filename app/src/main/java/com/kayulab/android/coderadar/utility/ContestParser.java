@@ -44,8 +44,10 @@ public class ContestParser {
             String title ="",description = "",url = "",startDate = "" ,endDate = "";
             if (titleElements.size() != 0)
                 title = titleElements.get(0).text();
-            if (descriptionElements.size() != 0)
+            if (descriptionElements.size() != 0) {
                 description = descriptionElements.get(0).text();
+                description = description.replace("<br>","");
+            }
             if (urlElements.size() != 0)
                 url = urlElements.get(0).text();
             if (startDateElements.size() != 0)
