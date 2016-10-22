@@ -251,8 +251,15 @@ public class ContestDetailFragment extends Fragment
                         startActivity(intent);
                     }
                 }
+
                 return true;
             }
+            case R.id.action_share:
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, mContest.getURL());
+                startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                return true;
         }
         return false;
     }
