@@ -30,6 +30,7 @@
     <!-- Action bar related -->
     <string name="action_calendar">Add to Calendar</string>
     <string name="action_browse">Go to website</string>
+    <string name="action_share">Share to Friends</string>
     <string name="action_filter">Filter</string>
 
     <!-- Contest Filter Dialog related -->

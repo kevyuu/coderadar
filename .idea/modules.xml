@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Coderadar.iml" filepath="$PROJECT_DIR$/Coderadar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coderadar.iml" filepath="$PROJECT_DIR$/coderadar.iml" />
     </modules>
   </component>
 </project>
-

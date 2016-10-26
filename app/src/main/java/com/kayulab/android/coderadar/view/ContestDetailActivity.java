@@ -1,5 +1,6 @@
 package com.kayulab.android.coderadar.view;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,10 +13,12 @@ import android.view.MenuItem;
 import android.view.Window;
 
 import com.kayulab.android.coderadar.R;
+import com.kayulab.android.coderadar.model.Contest;
 
 public class ContestDetailActivity extends FragmentActivity {
 
     ViewPager mViewPager;
+    Contest contest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class ContestDetailActivity extends FragmentActivity {
         setContentView(R.layout.activity_contest_detail);
 
 
+
         if (savedInstanceState == null) {
             Uri contestUri = (Uri) getIntent().getData();
             Fragment fragment = ContestDetailFragment.newInstance(contestUri);
@@ -40,6 +44,7 @@ public class ContestDetailActivity extends FragmentActivity {
                     .add(R.id.contest_detail_container,fragment)
                     .commit();
         }
+
     }
 
 
@@ -53,5 +58,4 @@ public class ContestDetailActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         return false;
     }
-
 }
