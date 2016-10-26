@@ -32,6 +32,7 @@
     <string name="action_browse">Go to website</string>
     <string name="action_share">Share to Friends</string>
     <string name="action_filter">Filter</string>
+    <string name="action_about_us">About Us</string>
 
     <!-- Contest Filter Dialog related -->
     <string name="filter_dialog_title">Filter</string>
