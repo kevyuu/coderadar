@@ -13,6 +13,7 @@ public class Contest {
     private String mSource;
     private Long mStartDate;
     private Long mFinishDate;
+    private String mURL;
 
     public String getURL() {
         return mURL;
@@ -23,7 +24,7 @@ public class Contest {
         return this;
     }
 
-    private String mURL;
+
 
     public String getTitle() {
         return mTitle;

@@ -80,6 +80,9 @@ public class MainActivity extends FragmentActivity implements ContestListFragmen
                 Intent i = new Intent(this,SettingsActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.action_about_us :
+                Intent a=new Intent(this,AboutUsActivity.class);
+                startActivity(a);
         }
 
         return false;
